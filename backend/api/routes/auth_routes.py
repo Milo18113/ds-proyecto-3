@@ -8,22 +8,7 @@ from backend.domain.enums.role import Role
 router = APIRouter(tags=["Auth"])
 
 
-# ── DTOs de entrada y salida ──────────────────────────────────────────────
-
-class LoginRequest(BaseModel):
-    email: str
-    password: str
-
-
-class LoginResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-    role: str
-
-
-class MeResponse(BaseModel):
-    user_id: str
-    role: str
+# DTOs de entrada y salida no creados verán
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────
