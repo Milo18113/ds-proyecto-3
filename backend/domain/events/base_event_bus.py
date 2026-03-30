@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from backend.domain.events.base_event import DomainEvent
-from backend.domain.observers.base_observer import Observer
+from backend.domain.observers.observer import Observer
 
 
 class BaseEventBus(ABC):
