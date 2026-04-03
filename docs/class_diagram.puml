@@ -1,0 +1,169 @@
+@startuml IncidentManagementClassDiagram
+
+class User {
+    <<abstract>>
+    +id: String
+    +name: String
+    +email: String
+    +hashed_password: String
+    +role: Role
+    +created_at: DateTime
+    +can_view_all_incidents() bool
+    +can_assign_incident() bool
+    +can_change_incident_status() bool
+    +can_view_all_tasks() bool
+    +can_view_all_notifications() bool
+}
+
+class Operator {
+    +role: Role = OPERATOR
+}
+
+class Supervisor {
+    +role: Role = SUPERVISOR
+}
+
+class Admin {
+    +role: Role = ADMIN
+}
+
+class Incident {
+    +id: String
+    +title: String
+    +description: String
+    +severity: Severity
+    +created_by: String
+    +created_at: DateTime
+    +status: IncidentStatus
+    +assigned_to: String
+    +assign(user_id: String)
+}
+
+class Task {
+    +id: String
+    +incident_id: String
+}
+
+class Notification {
+    +id: String
+    +recipient: String
+    +channel: String
+}
+
+class IncidentState {
+    <<abstract>>
+}
+
+class OpenState
+class AssignedState
+class InProgressState
+class ResolvedState
+class ClosedState
+
+class BaseObserver {
+    <<abstract>>
+}
+
+class NotificationObserver
+class AuditObserver
+
+class BaseEventBus {
+    <<abstract>>
+}
+
+class EventBus {
+    -_instance: EventBus
+    +get_instance() EventBus
+}
+
+class DomainEvent
+
+class BaseCommand {
+    <<abstract>>
+}
+
+class SendEmailCommand
+class SendInAppCommand
+
+class NotificationTemplate {
+    <<abstract>>
+}
+
+class EmailTemplate
+class InAppTemplate
+
+class NotificationFactory
+
+class UserRepository {
+    <<interface>>
+    +find_all() List<User>
+}
+
+class IncidentRepository {
+    <<interface>>
+    +find_all() List<Incident>
+}
+
+class TaskRepository {
+    <<interface>>
+}
+
+class NotificationRepository {
+    <<interface>>
+}
+
+class Role {
+    <<enumeration>>
+}
+
+class IncidentStatus {
+    <<enumeration>>
+}
+
+class TaskStatus {
+    <<enumeration>>
+}
+
+class Severity {
+    <<enumeration>>
+}
+
+class EventType {
+    <<enumeration>>
+}
+
+class NotificationStatus {
+    <<enumeration>>
+}
+
+User <|-- Operator
+User <|-- Supervisor
+User <|-- Admin
+
+IncidentState <|-- OpenState
+IncidentState <|-- AssignedState
+IncidentState <|-- InProgressState
+IncidentState <|-- ResolvedState
+IncidentState <|-- ClosedState
+
+BaseObserver <|-- NotificationObserver
+BaseObserver <|-- AuditObserver
+
+BaseEventBus <|-- EventBus
+
+BaseCommand <|-- SendEmailCommand
+BaseCommand <|-- SendInAppCommand
+
+NotificationTemplate <|-- EmailTemplate
+NotificationTemplate <|-- InAppTemplate
+
+Incident *-- IncidentState
+Incident "1" *-- "1..*" Task
+User "1" *-- "1..*" Notification
+
+UserRepository --> User
+IncidentRepository --> Incident
+TaskRepository --> Task
+NotificationRepository --> Notification
+
+@enduml
