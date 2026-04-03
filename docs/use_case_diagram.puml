@@ -1,0 +1,72 @@
+@startuml Use Case Diagram - OpsCenter
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Operator" as OP
+actor "Supervisor" as SUP
+actor "Admin" as ADM
+
+rectangle "OpsCenter" {
+
+    ' ── Autenticación ─────────────────────────────
+    usecase "Iniciar sesión" as UC_LOGIN
+    usecase "Ver perfil propio" as UC_ME
+
+    ' ── Incidentes ────────────────────────────────
+    usecase "Crear incidente" as UC_CREATE_INC
+    usecase "Ver incidentes propios" as UC_VIEW_OWN_INC
+    usecase "Ver todos los incidentes" as UC_VIEW_ALL_INC
+    usecase "Ver detalle de incidente" as UC_DETAIL_INC
+    usecase "Asignar incidente" as UC_ASSIGN_INC
+    usecase "Cambiar estado de incidente" as UC_STATUS_INC
+
+    ' ── Tareas ────────────────────────────────────
+    usecase "Crear tarea" as UC_CREATE_TASK
+    usecase "Ver tareas asignadas" as UC_VIEW_OWN_TASK
+    usecase "Ver todas las tareas" as UC_VIEW_ALL_TASK
+    usecase "Cambiar estado de tarea" as UC_STATUS_TASK
+
+    ' ── Notificaciones ────────────────────────────
+    usecase "Ver notificaciones propias" as UC_VIEW_OWN_NOTIF
+    usecase "Ver todas las notificaciones" as UC_VIEW_ALL_NOTIF
+}
+
+' ── Operator ──────────────────────────────────────
+OP --> UC_LOGIN
+OP --> UC_ME
+OP --> UC_CREATE_INC
+OP --> UC_VIEW_OWN_INC
+OP --> UC_DETAIL_INC
+OP --> UC_CREATE_TASK
+OP --> UC_VIEW_OWN_TASK
+OP --> UC_STATUS_TASK
+OP --> UC_VIEW_OWN_NOTIF
+
+' ── Supervisor ────────────────────────────────────
+SUP --> UC_LOGIN
+SUP --> UC_ME
+SUP --> UC_CREATE_INC
+SUP --> UC_VIEW_ALL_INC
+SUP --> UC_DETAIL_INC
+SUP --> UC_ASSIGN_INC
+SUP --> UC_STATUS_INC
+SUP --> UC_CREATE_TASK
+SUP --> UC_VIEW_ALL_TASK
+SUP --> UC_STATUS_TASK
+SUP --> UC_VIEW_OWN_NOTIF
+
+' ── Admin ─────────────────────────────────────────
+ADM --> UC_LOGIN
+ADM --> UC_ME
+ADM --> UC_CREATE_INC
+ADM --> UC_VIEW_ALL_INC
+ADM --> UC_DETAIL_INC
+ADM --> UC_ASSIGN_INC
+ADM --> UC_STATUS_INC
+ADM --> UC_CREATE_TASK
+ADM --> UC_VIEW_ALL_TASK
+ADM --> UC_STATUS_TASK
+ADM --> UC_VIEW_ALL_NOTIF
+
+@enduml
