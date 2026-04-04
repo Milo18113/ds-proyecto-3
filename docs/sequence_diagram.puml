@@ -1,0 +1,62 @@
+@startuml NotificationFlowSequenceDiagram
+
+actor Operator
+
+participant "API Layer\n(incident_routes)" as API
+participant "CreateIncidentUseCase" as UseCase
+participant "IncidentRepository" as IncidentRepo
+participant "EventBus" as EventBus
+participant "NotificationObserver" as NotifObserver
+participant "AuditObserver" as AuditObserver
+participant "NotificationService" as NotifService
+participant "NotificationTemplate\n(Email/InApp)" as Template
+participant "NotificationFactory" as Factory
+participant "NotificationRepository" as NotifRepo
+participant "Command\n(SendEmail/SendInApp)" as Command
+participant "Provider\n(Email/InApp)" as Provider
+
+== Crear incidente ==
+
+Operator -> API : POST /incidents
+API -> UseCase : execute(dto, user)
+
+UseCase -> IncidentRepo : save(incident)
+IncidentRepo --> UseCase : incident_saved
+
+== Publicación de evento ==
+
+UseCase -> EventBus : publish(IncidentCreatedEvent)
+
+== Notificación a observers ==
+
+EventBus -> NotifObserver : update(event)
+EventBus -> AuditObserver : update(event)
+
+AuditObserver -> AuditObserver : log(event)
+
+== Flujo de notificaciones ==
+
+NotifObserver -> NotifService : handle_event(event)
+
+NotifService -> Template : build_message(...)
+Template --> NotifService : message
+
+NotifService -> Factory : create_notification(...)
+Factory --> NotifService : Notification
+
+NotifService -> NotifRepo : save(notification)
+NotifRepo --> NotifService : saved_notification
+
+NotifService -> Factory : create_send_command(...)
+Factory --> NotifService : Command
+
+NotifService -> Command : execute()
+
+Command -> Provider : send(recipient, message)
+Provider --> Command : ok
+
+Command --> NotifService : executed
+
+NotifService -> NotifRepo : update(status=sent)
+
+@enduml
