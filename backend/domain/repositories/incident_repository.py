@@ -1,45 +1,35 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 from backend.domain.entities.incident import Incident
 
 
 class IncidentRepository(ABC):
-    """
-    Puerto de salida para persistencia de incidentes.
-    La implementación concreta vive en infrastructure/repositories/.
-    """
+    """Puerto de salida para persistencia de incidentes."""
 
     @abstractmethod
-    def save(self, incident: Incident) -> None:
-        """Persiste un incidente nuevo o actualiza uno existente."""
+    def save(self, incident: Incident) -> Incident:
         ...
 
     @abstractmethod
-    def find_by_id(self, incident_id: str) -> Incident | None:
-        """Retorna un incidente por su ID, o None si no existe."""
+    def find_by_id(self, incident_id: str) -> Optional[Incident]:
         ...
 
     @abstractmethod
     def find_all(self) -> list[Incident]:
-        """Retorna todos los incidentes. Usado por Admin y Supervisor."""
         ...
 
     @abstractmethod
-    def find_by_created_by(self, user_id: str) -> list[Incident]:
-        """Retorna incidentes creados por un usuario específico."""
+    def find_by_creator(self, user_id: str) -> list[Incident]:
         ...
 
     @abstractmethod
-    def find_by_assigned_to(self, user_id: str) -> list[Incident]:
-        """Retorna incidentes asignados a un usuario específico."""
+    def find_by_assigned(self, user_id: str) -> list[Incident]:
         ...
 
     @abstractmethod
-    def find_by_created_by_or_assigned_to(self, user_id: str) -> list[Incident]:
-        """Retorna incidentes donde el usuario es creador o asignado.
-        Usado para la vista del Operator."""
+    def find_by_creator_or_assigned(self, user_id: str) -> list[Incident]:
         ...
 
     @abstractmethod
-    def delete(self, incident_id: str) -> None:
-        """Elimina un incidente por su ID."""
+    def update(self, incident: Incident) -> Incident:
         ...

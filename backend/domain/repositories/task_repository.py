@@ -1,40 +1,31 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 from backend.domain.entities.task import Task
 
 
 class TaskRepository(ABC):
-    """
-    Puerto de salida para persistencia de tareas.
-    La implementación concreta vive en infrastructure/repositories/.
-    """
+    """Puerto de salida para persistencia de tareas."""
 
     @abstractmethod
-    def save(self, task: Task) -> None:
-        """Persiste una tarea nueva o actualiza una existente."""
+    def save(self, task: Task) -> Task:
         ...
 
     @abstractmethod
-    def find_by_id(self, task_id: str) -> Task | None:
-        """Retorna una tarea por su ID, o None si no existe."""
+    def find_by_id(self, task_id: str) -> Optional[Task]:
         ...
 
     @abstractmethod
     def find_all(self) -> list[Task]:
-        """Retorna todas las tareas. Usado por Admin."""
         ...
 
     @abstractmethod
-    def find_by_incident_id(self, incident_id: str) -> list[Task]:
-        """Retorna todas las tareas asociadas a un incidente."""
+    def find_by_assigned(self, user_id: str) -> list[Task]:
         ...
 
     @abstractmethod
-    def find_by_assigned_to(self, user_id: str) -> list[Task]:
-        """Retorna tareas asignadas a un usuario específico.
-        Usado para la vista del Operator."""
+    def find_by_incident(self, incident_id: str) -> list[Task]:
         ...
 
     @abstractmethod
-    def delete(self, task_id: str) -> None:
-        """Elimina una tarea por su ID."""
+    def update(self, task: Task) -> Task:
         ...
