@@ -1,16 +1,10 @@
 from backend.domain.repositories.incident_repository import IncidentRepository
 from backend.domain.factories.entity_factory import IncidentFactory
-from backend.domain.enums.event_type import EventType
 from backend.infrastructure.events.event_bus import EventBus
 from backend.application.dtos.incident_dto import CreateIncidentDTO, IncidentResponseDTO
 
 
 class CreateIncidentUseCase:
-    """
-    Caso de uso: crear un incidente.
-    Persiste el incidente y publica el evento INCIDENT_CREATED.
-    """
-
     def __init__(
         self,
         incident_repo: IncidentRepository,
@@ -20,7 +14,6 @@ class CreateIncidentUseCase:
         self.event_bus = event_bus
 
     def execute(self, dto: CreateIncidentDTO, created_by: str) -> IncidentResponseDTO:
-        # Crear entidad con Factory
         incident = IncidentFactory.create(
             title=dto.title,
             description=dto.description,
@@ -28,18 +21,7 @@ class CreateIncidentUseCase:
             created_by=created_by,
         )
 
-        # Persistir
         saved = self.incident_repo.save(incident)
-
-        # Publicar evento
-        self.event_bus.publish(
-            EventType.INCIDENT_CREATED,
-            {
-                "recipient": created_by,
-                "title": saved.title,
-                "detail": f"Severidad: {saved.severity.value}",
-            },
-        )
 
         return IncidentResponseDTO(
             id=saved.id,

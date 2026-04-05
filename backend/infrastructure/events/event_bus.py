@@ -1,4 +1,4 @@
-from backend.domain.publishers.base_event_bus import BaseEventBus
+from backend.domain.events.base_event_bus import BaseEventBus
 from backend.domain.observers.observer import Observer
 from backend.domain.events.base_event import DomainEvent
 
@@ -8,10 +8,6 @@ class EventBus(BaseEventBus):
     Implementación concreta del Event Bus.
     Mantiene una lista de observers suscritos y les entrega
     cada evento publicado en orden de suscripción.
-
-    Es un Singleton para garantizar que toda la aplicación
-    comparte el mismo bus — ese es el patrón creacional adicional
-    que justifica la Persona 4 en el README.
     """
 
     _instance: "EventBus | None" = None
@@ -39,5 +35,4 @@ class EventBus(BaseEventBus):
             try:
                 observer.update(event)
             except Exception as e:
-                # Un observer fallido no debe detener al resto
                 print(f"[EventBus] Error en {observer}: {e}")

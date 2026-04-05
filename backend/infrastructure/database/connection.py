@@ -5,9 +5,10 @@ from backend.infrastructure.orm.base import Base
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://opscenter:opscenter@db:5432/opscenter",
+    "postgresql://opscenter:opscenter@localhost:5432/opscenter",
 )
 
+print("DATABASE_URL usada:", DATABASE_URL)
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
