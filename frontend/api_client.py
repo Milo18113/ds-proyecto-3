@@ -1,6 +1,5 @@
 import requests
 
-
 API_BASE_URL = "http://localhost:8000"
 
 
@@ -10,7 +9,7 @@ class ApiClient:
         self.token = token
 
     def _headers(self):
-        headers = {"Content-Type": "application/json"}
+        headers = {}
         if self.token:
             headers["Authorization"] = f"Bearer {self.token}"
         return headers
@@ -18,7 +17,7 @@ class ApiClient:
     def login(self, email, password):
         return requests.post(
             f"{self.base_url}/login",
-            json={"email": email, "password": password},
+            data={"username": email, "password": password},
             headers=self._headers(),
             timeout=10,
         )
@@ -33,6 +32,14 @@ class ApiClient:
     def get_incidents(self):
         return requests.get(
             f"{self.base_url}/incidents",
+            headers=self._headers(),
+            timeout=10,
+        )
+
+    def create_incident(self, payload):
+        return requests.post(
+            f"{self.base_url}/incidents",
+            json=payload,
             headers=self._headers(),
             timeout=10,
         )

@@ -1,4 +1,4 @@
-from backend.domain.publishers.base_event_bus import BaseEventBus
+from backend.domain.events.base_event_bus import BaseEventBus
 from backend.domain.observers.observer import Observer
 from backend.domain.events.base_event import DomainEvent
 
