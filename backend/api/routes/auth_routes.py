@@ -4,9 +4,9 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from backend.infrastructure.database.connection import get_db
-from backend.infrastructure.auth.jwt_handler import create_access_token
-from backend.infrastructure.auth.password_handler import verify_password
 from backend.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
+from backend.application.use_cases.login import LoginUseCase
+from backend.application.dtos.user_dto import LoginDTO
 from backend.api.guards.role_guard import get_current_user_payload
 
 router = APIRouter(tags=["Auth"])
@@ -23,34 +23,35 @@ class MeResponse(BaseModel):
     role: str
 
 
-def get_user_repo(db: Session = Depends(get_db)) -> UserRepositoryImpl:
-    return UserRepositoryImpl(db)
-
-
 @router.post("/login", response_model=LoginResponse)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    user_repo: UserRepositoryImpl = Depends(get_user_repo),
+    db: Session = Depends(get_db),
 ):
     """
     Autentica al usuario con username/password en formato OAuth2.
-    En este proyecto, username será el email.
+    Delega toda la lógica al LoginUseCase.
     """
-    email = (form_data.username or "").strip().lower()
-    user = user_repo.find_by_email(email)
+    user_repo = UserRepositoryImpl(db)
+    use_case = LoginUseCase(user_repo)
 
-    if user is None or not verify_password(form_data.password, user.hashed_password):
+    dto = LoginDTO(
+        email=(form_data.username or "").strip().lower(),
+        password=form_data.password,
+    )
+
+    try:
+        token_dto, role = use_case.execute(dto)
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Credenciales incorrectas.",
         )
 
-    token = create_access_token(user_id=user.id, role=user.role)
-
     return LoginResponse(
-        access_token=token,
-        token_type="bearer",
-        role=user.role.value,
+        access_token=token_dto.access_token,
+        token_type=token_dto.token_type,
+        role=role.value,
     )
 
 

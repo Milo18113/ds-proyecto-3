@@ -16,6 +16,7 @@ from backend.api.routes.auth_routes import router as auth_router
 from backend.api.routes.incident_routes import router as incident_router
 from backend.api.routes.task_routes import router as task_router
 from backend.api.routes.notification_routes import router as notification_router
+from backend.api.routes.user_routes import router as user_router
 
 app = FastAPI(
     title="OpsCenter API",
@@ -58,3 +59,4 @@ app.include_router(auth_router)
 app.include_router(incident_router)
 app.include_router(task_router)
 app.include_router(notification_router)
+app.include_router(user_router)
