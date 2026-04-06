@@ -8,7 +8,6 @@ DATABASE_URL = os.getenv(
     "postgresql://opscenter:opscenter@localhost:5432/opscenter",
 )
 
-print("DATABASE_URL usada:", DATABASE_URL)
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
@@ -24,7 +23,6 @@ def get_db() -> Session:
 
 def init_db() -> None:
     """Crea todas las tablas a partir de los modelos ORM registrados."""
-    # Importar todos los modelos para que Base.metadata los conozca
     import backend.infrastructure.orm.models.user_model  # noqa: F401
     import backend.infrastructure.orm.models.incident_model  # noqa: F401
     import backend.infrastructure.orm.models.task_model  # noqa: F401

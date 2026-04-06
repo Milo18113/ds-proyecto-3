@@ -29,12 +29,6 @@ def logout():
 
 
 def get_menu_for_role(role):
-    role = (role or "").upper()
-
-    if role == "ADMIN":
-        return ["Incidentes", "Crear incidente", "Tareas", "Notificaciones"]
-    if role == "SUPERVISOR":
-        return ["Incidentes", "Crear incidente", "Tareas", "Notificaciones"]
     return ["Incidentes", "Crear incidente", "Tareas", "Notificaciones"]
 
 
