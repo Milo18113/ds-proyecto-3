@@ -29,5 +29,21 @@ def render_incidents():
         df = pd.DataFrame(incidents)
         st.dataframe(df, use_container_width=True)
 
+        # Selector para ver detalle
+        st.markdown("### Ver detalle de incidente")
+        incident_options = {
+            f"{inc['title']} — {inc['status']} ({inc['id'][:8]}...)": inc["id"]
+            for inc in incidents
+        }
+        selected = st.selectbox(
+            "Selecciona un incidente",
+            list(incident_options.keys()),
+        )
+
+        if st.button("Ver detalle"):
+            st.session_state.selected_incident_id = incident_options[selected]
+            st.session_state.current_view = "Detalle incidente"
+            st.rerun()
+
     except Exception as e:
         st.error(f"Error al consultar incidentes: {e}")
