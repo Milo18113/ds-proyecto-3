@@ -1,29 +1,16 @@
 from backend.domain.repositories.task_repository import TaskRepository
 from backend.domain.enums.task_status import TaskStatus
-from backend.domain.enums.event_type import EventType
+from backend.domain.events.task_events import TaskDoneEvent
 from backend.infrastructure.events.event_bus import EventBus
 from backend.application.dtos.task_dto import ChangeTaskStatusDTO, TaskResponseDTO
 
 
 class ChangeTaskStatusUseCase:
-    """
-    Caso de uso: cambiar el estado de una tarea.
-    Si la tarea pasa a DONE, publica el evento TASK_DONE.
-    """
-
-    def __init__(
-        self,
-        task_repo: TaskRepository,
-        event_bus: EventBus,
-    ):
+    def __init__(self, task_repo: TaskRepository, event_bus: EventBus):
         self.task_repo = task_repo
         self.event_bus = event_bus
 
-    def execute(
-        self,
-        task_id: str,
-        dto: ChangeTaskStatusDTO,
-    ) -> TaskResponseDTO:
+    def execute(self, task_id: str, dto: ChangeTaskStatusDTO) -> TaskResponseDTO:
         task = self.task_repo.find_by_id(task_id)
         if not task:
             raise ValueError(f"Tarea {task_id} no encontrada.")
@@ -33,15 +20,12 @@ class ChangeTaskStatusUseCase:
 
         updated = self.task_repo.update(task)
 
-        # Publicar evento si la tarea se completó
         if dto.status == TaskStatus.DONE and old_status != TaskStatus.DONE:
             self.event_bus.publish(
-                EventType.TASK_DONE,
-                {
-                    "recipient": updated.assigned_to,
-                    "title": updated.title,
-                    "detail": f"Incidente asociado: {updated.incident_id}",
-                },
+                TaskDoneEvent(
+                    task=updated,
+                    completed_by_id=updated.assigned_to,
+                )
             )
 
         return TaskResponseDTO(
