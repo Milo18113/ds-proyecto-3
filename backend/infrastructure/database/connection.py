@@ -6,8 +6,8 @@ from backend.infrastructure.orm.base import Base
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise RuntimeError(
-        "DATABASE_URL no está definida. Configúrala en el entorno o en .env "
-        "(ver .env.example). En Docker Compose suele apuntar al host `db`."
+        "DATABASE_URL no está definida. Configúrala en el entorno o en el archivo .env "
+        "(copia .env.example a .env)."
     )
 
 engine = create_engine(DATABASE_URL, echo=False)
