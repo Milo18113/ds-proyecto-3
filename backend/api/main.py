@@ -1,5 +1,15 @@
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+# Cargar .env de la raíz del repo antes de leer JWT, DATABASE_URL o CORS.
+load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
+
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from backend.seed_users import seed_users
 
 from backend.api.routes.auth_routes import router as auth_router
@@ -13,9 +23,21 @@ app = FastAPI(
     description="API del sistema OpsCenter",
 )
 
+def _cors_allow_origins() -> list[str]:
+    """
+    Orígenes permitidos para CORS (navegador). Lista separada por comas en CORS_ORIGINS.
+    Por defecto solo Streamlit local; nunca usar '*' junto con allow_credentials=True.
+    """
+    raw = os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:8501,http://127.0.0.1:8501",
+    )
+    return [o.strip() for o in raw.split(",") if o.strip()]
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_cors_allow_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

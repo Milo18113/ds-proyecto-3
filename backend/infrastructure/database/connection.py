@@ -3,10 +3,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from backend.infrastructure.orm.base import Base
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://opscenter:opscenter@localhost:5432/opscenter",
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL no está definida. Configúrala en el entorno o en .env "
+        "(ver .env.example). En Docker Compose suele apuntar al host `db`."
+    )
 
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)

@@ -97,7 +97,7 @@ git clone https://github.com/Milo18113/ds-proyecto-3.git
 cd ds-proyecto-3
 
 cp .env.example .env
-# Editar .env con las variables necesarias
+# Editar .env: misma contraseña en POSTGRES_PASSWORD y en DATABASE_URL; SECRET_KEY única y larga.
 docker compose up --build
 ```
 
@@ -118,17 +118,18 @@ docker compose down
 
 El proyecto utiliza un archivo `.env` basado en `.env.example`.
 
-Variables incluidas:
+Variables (plantilla comentada en `.env.example`):
 
-```env
-POSTGRES_DB=opscenter
-POSTGRES_USER=opscenter
-POSTGRES_PASSWORD=opscenter
-DATABASE_URL=postgresql://opscenter:opscenter@db:5432/opscenter
-SECRET_KEY=supersecretkey
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=60
-```
+| Variable | Uso |
+|----------|-----|
+| `POSTGRES_*` | Credenciales del contenedor Postgres |
+| `DATABASE_URL` | Conexión SQLAlchemy (en Docker usar host `db`) |
+| `SECRET_KEY` | Firma JWT (obligatoria; el backend falla si falta) |
+| `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES` | JWT (valores por defecto razonables en desarrollo) |
+| `CORS_ORIGINS` | Orígenes permitidos para el navegador (lista separada por comas) |
+| `API_BASE_URL` | URL del API para el cliente Streamlit (en Compose se fija al servicio `backend`) |
+
+Los secretos reales solo viven en `.env` (archivo ignorado por git). No subas `.env` al repositorio.
 
 ## Cómo usarlo
 
