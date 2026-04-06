@@ -1,11 +1,19 @@
+import os
 from datetime import datetime, timedelta
+
 from jose import JWTError, jwt
+
 from backend.domain.enums.role import Role
 
-# En producción estos valores vienen de variables de entorno (.env)
-SECRET_KEY = "opscenter-secret-key-change-in-production"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError(
+        "SECRET_KEY no está definida. Configúrala en el entorno o en el archivo .env "
+        "(copia .env.example a .env)."
+    )
+
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
 
 def create_access_token(user_id: str, role: Role) -> str:

@@ -1,3 +1,9 @@
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
 from backend.infrastructure.database.connection import SessionLocal, init_db
 from backend.infrastructure.orm.models.user_model import UserModel
 from backend.infrastructure.auth.password_handler import hash_password
