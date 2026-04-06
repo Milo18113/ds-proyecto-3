@@ -11,9 +11,9 @@ if TYPE_CHECKING:
 
 class IncidentState(ABC):
     """
-    Clase base abstracta del patrón State aplicado a Incident.
-    Cada estado concreto define qué transiciones son válidas
-    y cuáles deben lanzar excepción.
+    Estado abstracto del ciclo de vida de un incidente.
+    Cada estado concreto define qué transiciones están permitidas
+    y cuáles deben rechazar con InvalidTransitionError.
     """
 
     @abstractmethod
@@ -38,7 +38,7 @@ class IncidentState(ABC):
 
     @abstractmethod
     def get_status(self) -> IncidentStatus:
-        """Retorna el IncidentStatus que representa este estado."""
+        """Retorna el enum del estado concreto."""
         ...
 
     def _invalid_transition(self, target: IncidentStatus) -> None:
@@ -48,9 +48,6 @@ class IncidentState(ABC):
         raise InvalidTransitionError(
             f"No se puede pasar de {self.get_status().value} a {target.value}."
         )
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
 
 
 class InvalidTransitionError(Exception):

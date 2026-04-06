@@ -1,6 +1,6 @@
 # OpsCenter
 
-Plataforma interna de gestión de incidentes operativos para equipos fintech. Reemplaza el uso de correos, hojas de cálculo y mensajería informal con un sistema trazable, con roles, flujos de estado y notificaciones automáticas. OpsCenter centraliza el registro de incidentes, asignación de responsabilidad, y desorden de notificaciones en una sola plataforma interna.
+Plataforma interna de gestión de incidentes operativos para equipos fintech. Reemplaza el uso de correos, hojas de cálculo y mensajería informal con un sistema trazable, con roles, flujos de estado y notificaciones automáticas. OpsCenter centraliza el registro de incidentes, asignación de responsabilidad, y la gestión de notificaciones en una sola plataforma interna.
 
 ---
 
@@ -66,7 +66,6 @@ opscenter/
 ---
 
 ## Patrones de diseño implementados
-
 ### Comportamiento
 
 | Patrón          | Dónde se aplica                          | Justificación                                                                 |
@@ -90,23 +89,22 @@ opscenter/
 ### Requisitos
 
 - Docker Desktop instalado y corriendo
-
+- Git instalado
 ### Pasos
 
 ```bash
-git clone https://github.com/tu-org/opscenter.git
-cd opscenter
+git clone https://github.com/Milo18113/ds-proyecto-3.git
+cd ds-proyecto-3
 
 cp .env.example .env
 # Editar .env con las variables necesarias
-
 docker compose up --build
 ```
 
 Una vez levantado:
 
-- **API**: `http://localhost:8000`
-- **Docs de la API**: `http://localhost:8000/docs`
+- **API**: `http://localhost:8001`
+- **Docs de la API**: `http://localhost:8001/docs`
 - **Frontend**: `http://localhost:8501`
 
 ### Detener el sistema
@@ -116,12 +114,28 @@ docker compose down
 ```
 
 ---
+## Variables de entorno
+
+El proyecto utiliza un archivo `.env` basado en `.env.example`.
+
+Variables incluidas:
+
+```env
+POSTGRES_DB=opscenter
+POSTGRES_USER=opscenter
+POSTGRES_PASSWORD=opscenter
+DATABASE_URL=postgresql://opscenter:opscenter@db:5432/opscenter
+SECRET_KEY=supersecretkey
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+```
 
 ## Cómo usarlo
 
 1. Abrir el frontend en `http://localhost:8501`
 2. Iniciar sesión con las credenciales del usuario (ver usuarios de prueba abajo)
 3. Según el rol, el sistema mostrará las opciones disponibles
+4. La documentación interactiva de la API está disponible en `http://localhost:8001/docs`
 
 ### Usuarios de prueba
 

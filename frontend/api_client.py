@@ -1,6 +1,7 @@
+import os
 import requests
 
-API_BASE_URL = "http://localhost:8000"
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8001")
 
 
 class ApiClient:
@@ -47,6 +48,14 @@ class ApiClient:
     def get_tasks(self):
         return requests.get(
             f"{self.base_url}/tasks",
+            headers=self._headers(),
+            timeout=10,
+        )
+
+    def update_task_status(self, task_id, payload):
+        return requests.patch(
+            f"{self.base_url}/tasks/{task_id}/status",
+            json=payload,
             headers=self._headers(),
             timeout=10,
         )

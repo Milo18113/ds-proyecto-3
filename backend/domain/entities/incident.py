@@ -11,11 +11,6 @@ from backend.domain.states.incident_state import IncidentState
 
 @dataclass
 class Incident:
-    """
-    Entidad de dominio que representa un incidente operativo.
-    El ciclo de vida (estado) se controla mediante el patrón State,
-    implementado en backend/domain/states/.
-    """
     id: str
     title: str
     description: str
@@ -48,20 +43,16 @@ class Incident:
     # ── Transiciones de estado (delegadas al patrón State) ────────────────
 
     def assign(self, user_id: str) -> None:
-        """Asigna el incidente a un usuario y transiciona a ASSIGNED."""
         self.state.assign(self)
         self.assigned_to = user_id
 
     def start_progress(self) -> None:
-        """Transiciona el incidente a IN_PROGRESS."""
         self.state.start_progress(self)
 
     def resolve(self) -> None:
-        """Transiciona el incidente a RESOLVED."""
         self.state.resolve(self)
 
     def close(self) -> None:
-        """Transiciona el incidente a CLOSED."""
         self.state.close(self)
 
     # ── Helpers ───────────────────────────────────────────────────────────
