@@ -1,7 +1,8 @@
 import os
 import requests
+import os
 
-API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8001")
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 
 class ApiClient:
