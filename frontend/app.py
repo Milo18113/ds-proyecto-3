@@ -1,5 +1,9 @@
 import streamlit as st
 from views.login_view import render_login
+from views.incidents_view import render_incidents
+from views.create_incident_view import render_create_incident
+from views.tasks_view import render_tasks
+from views.notifications_view import render_notifications
 
 st.set_page_config(page_title="OpsCenter", page_icon="🚨", layout="wide")
 
@@ -37,7 +41,12 @@ def get_menu_for_role(role):
 def render_sidebar():
     user = st.session_state.user or {}
     role = user.get("role", "UNKNOWN")
-    name = user.get("name") or user.get("full_name") or user.get("email", "Usuario")
+    name = (
+        user.get("name")
+        or user.get("full_name")
+        or user.get("email")
+        or user.get("user_id", "Usuario")
+    )
 
     st.sidebar.title("OpsCenter")
     st.sidebar.write(f"**Usuario:** {name}")
@@ -61,13 +70,13 @@ def render_home():
     st.write(f"Bienvenido. Tu rol actual es: **{role}**")
 
     if current_view == "Incidentes":
-        st.info("Aquí irá la vista de incidentes en el PR 2.")
+        render_incidents()
     elif current_view == "Crear incidente":
-        st.info("Aquí irá el formulario de crear incidente en el PR 2.")
+        render_create_incident()
     elif current_view == "Tareas":
-        st.info("Aquí irá la vista de tareas en el PR 2.")
+        render_tasks()
     elif current_view == "Notificaciones":
-        st.info("Aquí irá la vista de notificaciones en el PR 2.")
+        render_notifications()
 
 
 def main():

@@ -1,3 +1,4 @@
+import os
 import requests
 import os
 
@@ -48,6 +49,14 @@ class ApiClient:
     def get_tasks(self):
         return requests.get(
             f"{self.base_url}/tasks",
+            headers=self._headers(),
+            timeout=10,
+        )
+
+    def update_task_status(self, task_id, payload):
+        return requests.patch(
+            f"{self.base_url}/tasks/{task_id}/status",
+            json=payload,
             headers=self._headers(),
             timeout=10,
         )

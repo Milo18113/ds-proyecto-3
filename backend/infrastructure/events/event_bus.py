@@ -5,7 +5,9 @@ from backend.domain.events.base_event import DomainEvent
 
 class EventBus(BaseEventBus):
     """
-    EventBus concreto.
+    Implementación concreta del Event Bus.
+    Mantiene una lista de observers suscritos y les entrega
+    cada evento publicado en orden de suscripción.
     """
 
     _instance = None

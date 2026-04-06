@@ -46,6 +46,7 @@ def login(
         )
 
     token = create_access_token(user_id=user.id, role=user.role)
+
     return LoginResponse(
         access_token=token,
         token_type="bearer",
@@ -55,4 +56,7 @@ def login(
 
 @router.get("/me", response_model=MeResponse)
 def get_me(payload: dict = Depends(get_current_user_payload)):
-    return MeResponse(user_id=payload["sub"], role=payload["role"])
+    return MeResponse(
+        user_id=payload["sub"],
+        role=payload["role"],
+    )

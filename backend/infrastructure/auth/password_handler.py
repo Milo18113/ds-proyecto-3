@@ -1,6 +1,9 @@
 from passlib.context import CryptContext
 
-_pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
+_pwd_context = CryptContext(
+    schemes=["pbkdf2_sha256", "bcrypt"],
+    deprecated="auto",
+)
 
 
 def hash_password(plain_password: str) -> str:
