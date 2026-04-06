@@ -1,22 +1,12 @@
 from backend.domain.repositories.incident_repository import IncidentRepository
 from backend.domain.enums.incident_status import IncidentStatus
-from backend.domain.enums.event_type import EventType
+from backend.domain.events.incident_events import IncidentStatusChangedEvent
 from backend.infrastructure.events.event_bus import EventBus
 from backend.application.dtos.incident_dto import ChangeIncidentStatusDTO, IncidentResponseDTO
 
 
 class ChangeIncidentStatusUseCase:
-    """
-    Caso de uso: cambiar el estado de un incidente.
-    Solo SUPERVISOR y ADMIN pueden ejecutar este caso de uso.
-    Usa el patrón State para validar las transiciones permitidas.
-    """
-
-    def __init__(
-        self,
-        incident_repo: IncidentRepository,
-        event_bus: EventBus,
-    ):
+    def __init__(self, incident_repo: IncidentRepository, event_bus: EventBus):
         self.incident_repo = incident_repo
         self.event_bus = event_bus
 
@@ -30,7 +20,8 @@ class ChangeIncidentStatusUseCase:
         if not incident:
             raise ValueError(f"Incidente {incident_id} no encontrado.")
 
-        # Aplicar transición según el estado solicitado (patrón State)
+        previous_status = incident.status
+
         transition_map = {
             IncidentStatus.ASSIGNED: incident.assign,
             IncidentStatus.IN_PROGRESS: incident.start_progress,
@@ -43,7 +34,6 @@ class ChangeIncidentStatusUseCase:
             raise ValueError(f"Estado destino inválido: {dto.status.value}")
 
         if dto.status == IncidentStatus.ASSIGNED:
-            # assign requiere un user_id; si ya tiene asignado, se reasigna
             if not incident.assigned_to:
                 raise ValueError(
                     "No se puede cambiar a ASSIGNED sin asignar un usuario. "
@@ -53,18 +43,15 @@ class ChangeIncidentStatusUseCase:
         else:
             action()
 
-        # Persistir
         updated = self.incident_repo.update(incident)
 
-        # Publicar evento
-        recipient = updated.assigned_to or updated.created_by
         self.event_bus.publish(
-            EventType.INCIDENT_STATUS_CHANGED,
-            {
-                "recipient": recipient,
-                "title": updated.title,
-                "detail": f"Nuevo estado: {updated.status.value}",
-            },
+            IncidentStatusChangedEvent(
+                incident=updated,
+                previous_status=previous_status,
+                new_status=updated.status,
+                changed_by_id=changed_by,
+            )
         )
 
         return IncidentResponseDTO(

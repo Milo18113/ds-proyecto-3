@@ -22,15 +22,16 @@ from backend.application.dtos.task_dto import (
 
 from backend.api.dependencies.auth_dependency import get_current_user
 from backend.domain.entities.user import User
-
+from backend.application.services.notification_service import NotificationService
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 
 def _build_event_bus(db: Session) -> EventBus:
-    """Construye el Event Bus con sus observers registrados."""
     notification_repo = NotificationRepositoryImpl(db)
+    notification_service = NotificationService(notification_repo)
+
     bus = EventBus()
-    bus.subscribe(NotificationObserver(notification_repo))
+    bus.subscribe(NotificationObserver(notification_service))
     bus.subscribe(AuditObserver())
     return bus
 
