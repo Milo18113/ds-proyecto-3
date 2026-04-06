@@ -26,11 +26,13 @@ services:
     environment:
       - DATABASE_URL=postgresql://opscenter:opscenter@db:5432/opscenter
       - SECRET_KEY=opscenter-secret-key-change-in-production
+      - PYTHONPATH=/workspace
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      - ./backend:/app
+      - .:/workspace
+    working_dir: /workspace/backend
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:

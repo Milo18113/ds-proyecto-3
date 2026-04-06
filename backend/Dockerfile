@@ -1,11 +1,13 @@
 FROM python:3.11-slim
 
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# El código vive en /app/backend; PYTHONPATH=/app permite `from backend....`
 WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
+COPY . ./backend/
+ENV PYTHONPATH=/app
+WORKDIR /app/backend
 
 EXPOSE 8000
 

@@ -5,7 +5,7 @@ from backend.infrastructure.orm.base import Base
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://opscenter:opscenter@localhost:5432/opscenter",
+    "postgresql://opscenter:opscenter@db:5432/opscenter",
 )
 
 engine = create_engine(DATABASE_URL, echo=False)
