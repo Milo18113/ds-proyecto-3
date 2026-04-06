@@ -1,5 +1,6 @@
 from backend.domain.repositories.incident_repository import IncidentRepository
 from backend.domain.factories.entity_factory import IncidentFactory
+from backend.domain.events.incident_events import IncidentCreatedEvent
 from backend.infrastructure.events.event_bus import EventBus
 from backend.application.dtos.incident_dto import CreateIncidentDTO, IncidentResponseDTO
 from backend.domain.events.event import Event
@@ -7,11 +8,7 @@ from backend.domain.enums.event_type import EventType
 
 
 class CreateIncidentUseCase:
-    def __init__(
-        self,
-        incident_repo: IncidentRepository,
-        event_bus: EventBus,
-    ):
+    def __init__(self, incident_repo: IncidentRepository, event_bus: EventBus):
         self.incident_repo = incident_repo
         self.event_bus = event_bus
 
@@ -36,7 +33,9 @@ class CreateIncidentUseCase:
                 "created_by": saved.created_by,
                 "assigned_to": saved.assigned_to,
             },
-        )
+        # self.event_bus.publish(
+        #     IncidentCreatedEvent(incident=saved)
+        # )
         self.event_bus.publish(event)
 
         return IncidentResponseDTO(

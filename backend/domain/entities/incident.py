@@ -15,11 +15,11 @@ class Incident:
     title: str
     description: str
     severity: Severity
-    created_by: str
+    created_by: str  # ID del usuario que creó el incidente
     created_at: datetime = field(default_factory=datetime.utcnow)
     status: IncidentStatus = field(default=IncidentStatus.OPEN)
-    assigned_to: str | None = None
-    state: IncidentState = field(init=False)
+    assigned_to: str | None = None  # ID del usuario asignado (opcional)
+    state: IncidentState = field(init=False)  # Estado actual (patrón State)
 
     def __post_init__(self):
         if not self.id:
@@ -40,6 +40,8 @@ class Incident:
         if not isinstance(self.severity, Severity):
             raise ValueError(f"Severidad inválida: {self.severity}")
 
+    # ── Transiciones de estado (delegadas al patrón State) ────────────────
+
     def assign(self, user_id: str) -> None:
         self.state.assign(self)
         self.assigned_to = user_id
@@ -52,6 +54,8 @@ class Incident:
 
     def close(self) -> None:
         self.state.close(self)
+
+    # ── Helpers ───────────────────────────────────────────────────────────
 
     def is_open(self) -> bool:
         return self.status == IncidentStatus.OPEN

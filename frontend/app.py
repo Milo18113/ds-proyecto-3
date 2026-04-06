@@ -29,6 +29,12 @@ def logout():
 
 
 def get_menu_for_role(role):
+    role = (role or "").upper()
+
+    if role == "ADMIN":
+        return ["Incidentes", "Crear incidente", "Tareas", "Notificaciones"]
+    if role == "SUPERVISOR":
+        return ["Incidentes", "Crear incidente", "Tareas", "Notificaciones"]
     return ["Incidentes", "Crear incidente", "Tareas", "Notificaciones"]
 
 
@@ -48,6 +54,7 @@ def render_sidebar():
 
     menu_options = get_menu_for_role(role)
     selected = st.sidebar.radio("Navegación", menu_options)
+
     st.session_state.current_view = selected
 
     if st.sidebar.button("Cerrar sesión"):
