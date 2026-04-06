@@ -1,5 +1,12 @@
-from backend.domain.events.base_event import DomainEvent
 from backend.domain.observers.observer import Observer
+from backend.domain.events.base_event import DomainEvent
+from backend.domain.events.incident_events import (
+    IncidentCreatedEvent,
+    IncidentAssignedEvent,
+    IncidentStatusChangedEvent,
+)
+from backend.domain.events.task_events import TaskCreatedEvent, TaskDoneEvent
+from backend.domain.entities.notification import Notification
 
 
 class NotificationObserver(Observer):

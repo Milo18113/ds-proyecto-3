@@ -4,6 +4,8 @@ from backend.domain.observers.observer import Observer
 
 class AuditObserver(Observer):
     """
+    Observer simple de auditoría.
+    Por ahora solo registra en consola cada evento publicado.
     Segundo observer concreto requerido.
     """
 
