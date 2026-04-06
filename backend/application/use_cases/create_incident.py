@@ -3,8 +3,6 @@ from backend.domain.factories.entity_factory import IncidentFactory
 from backend.domain.events.incident_events import IncidentCreatedEvent
 from backend.infrastructure.events.event_bus import EventBus
 from backend.application.dtos.incident_dto import CreateIncidentDTO, IncidentResponseDTO
-from backend.domain.events.event import Event
-from backend.domain.enums.event_type import EventType
 
 
 class CreateIncidentUseCase:
@@ -22,21 +20,22 @@ class CreateIncidentUseCase:
 
         saved = self.incident_repo.save(incident)
 
-        event = Event(
-            event_type=EventType.INCIDENT_CREATED,
-            payload={
-                "incident_id": saved.id,
-                "title": saved.title,
-                "description": saved.description,
-                "severity": saved.severity,
-                "status": saved.status,
-                "created_by": saved.created_by,
-                "assigned_to": saved.assigned_to,
-            },
+        # event = Event(
+        #     event_type=EventType.INCIDENT_CREATED,
+        #     payload={
+        #         "incident_id": saved.id,
+        #         "title": saved.title,
+        #         "description": saved.description,
+        #         "severity": saved.severity,
+        #         "status": saved.status,
+        #         "created_by": saved.created_by,
+        #         "assigned_to": saved.assigned_to,
+        #     },
+        # )
         # self.event_bus.publish(
         #     IncidentCreatedEvent(incident=saved)
         # )
-        self.event_bus.publish(event)
+        self.event_bus.publish(IncidentCreatedEvent(incident=saved))
 
         return IncidentResponseDTO(
             id=saved.id,

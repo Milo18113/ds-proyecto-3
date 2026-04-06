@@ -103,8 +103,8 @@ docker compose up --build
 
 Una vez levantado:
 
-- **API**: `http://localhost:8001`
-- **Docs de la API**: `http://localhost:8001/docs`
+- **API**: `http://localhost:8000`
+- **Docs de la API**: `http://localhost:8000/docs`
 - **Frontend**: `http://localhost:8501`
 
 ### Detener el sistema
@@ -135,7 +135,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=60
 1. Abrir el frontend en `http://localhost:8501`
 2. Iniciar sesión con las credenciales del usuario (ver usuarios de prueba abajo)
 3. Según el rol, el sistema mostrará las opciones disponibles
-4. La documentación interactiva de la API está disponible en `http://localhost:8001/docs`
+4. La documentación interactiva de la API está disponible en `http://localhost:8000/docs`
 
 ### Usuarios de prueba
 

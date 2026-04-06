@@ -10,6 +10,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opscenter"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -37,6 +42,8 @@ services:
       - "8501:8501"
     env_file:
       - .env
+    environment:
+      API_BASE_URL: http://backend:8000
     depends_on:
       - backend
 
