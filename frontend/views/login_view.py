@@ -69,8 +69,15 @@ def render_login():
                 st.error(f"Error conectando con la API: {e}")
 
     st.markdown("### Usuarios de prueba")
-    st.code(
-        "admin@opscenter.com / admin123\n"
-        "supervisor@opscenter.com / super123\n"
-        "operator@opscenter.com / oper123"
-    )
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.code("admin@opscenter.com")
+        st.code("supervisor@opscenter.com")
+        st.code("operator@opscenter.com")
+    
+    with col2:
+        st.code("admin123")
+        st.code("super123")
+        st.code("oper123")
