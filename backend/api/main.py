@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from backend.seed_users import seed_users
 
-from backend.infrastructure.database.connection import init_db
 from backend.api.routes.auth_routes import router as auth_router
 from backend.api.routes.incident_routes import router as incident_router
 from backend.api.routes.task_routes import router as task_router
@@ -24,7 +24,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 def on_startup():
-    init_db()
+    seed_users()
 
 
 @app.get("/")

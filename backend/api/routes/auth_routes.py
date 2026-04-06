@@ -36,7 +36,8 @@ def login(
     Autentica al usuario con username/password en formato OAuth2.
     En este proyecto, username será el email.
     """
-    user = user_repo.find_by_email(form_data.username)
+    email = (form_data.username or "").strip().lower()
+    user = user_repo.find_by_email(email)
 
     if user is None or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
