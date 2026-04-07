@@ -58,9 +58,20 @@ def render_sidebar():
     st.sidebar.write(f"**Rol:** {role}")
 
     menu_options = get_menu_for_role(role)
-    selected = st.sidebar.radio("Navegación", menu_options)
 
-    st.session_state.current_view = selected
+
+    current = st.session_state.current_view
+    if current in menu_options:
+        default_index = menu_options.index(current)
+    else:
+        default_index = 0
+
+    selected = st.sidebar.radio("Navegación", menu_options, index=default_index)
+
+    
+    if selected != menu_options[default_index]:
+        st.session_state.current_view = selected
+        st.session_state.selected_incident_id = None
 
     if st.sidebar.button("Cerrar sesión"):
         logout()
