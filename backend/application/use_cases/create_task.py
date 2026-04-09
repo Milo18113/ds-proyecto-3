@@ -8,6 +8,11 @@ from backend.application.dtos.task_dto import CreateTaskDTO, TaskResponseDTO
 
 
 class CreateTaskUseCase:
+    """
+    Caso de uso: creación de tareas asociadas a incidentes.
+    Valida que el incidente y usuario asignado existan, crea la tarea
+    mediante Factory y dispara evento de notificación.
+    """
     def __init__(
         self,
         task_repo: TaskRepository,

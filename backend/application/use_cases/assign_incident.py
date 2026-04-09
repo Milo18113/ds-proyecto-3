@@ -6,6 +6,12 @@ from backend.application.dtos.incident_dto import AssignIncidentDTO, IncidentRes
 
 
 class AssignIncidentUseCase:
+    """
+    Caso de uso: asignación de incidentes a usuarios.
+    Valida que el incidente y usuario existan, actualiza la asignación
+    y dispara un evento de notificación.
+    """
+    
     def __init__(
         self,
         incident_repo: IncidentRepository,

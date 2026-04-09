@@ -6,6 +6,11 @@ from backend.application.dtos.incident_dto import CreateIncidentDTO, IncidentRes
 
 
 class CreateIncidentUseCase:
+    """
+    Caso de uso: creación de nuevos incidentes.
+    Crea una entidad Incidente mediante Factory, la persiste
+    y dispara un evento de notificación del sistema.
+    """
     def __init__(self, incident_repo: IncidentRepository, event_bus: EventBus):
         self.incident_repo = incident_repo
         self.event_bus = event_bus
@@ -19,22 +24,6 @@ class CreateIncidentUseCase:
         )
 
         saved = self.incident_repo.save(incident)
-
-        # event = Event(
-        #     event_type=EventType.INCIDENT_CREATED,
-        #     payload={
-        #         "incident_id": saved.id,
-        #         "title": saved.title,
-        #         "description": saved.description,
-        #         "severity": saved.severity,
-        #         "status": saved.status,
-        #         "created_by": saved.created_by,
-        #         "assigned_to": saved.assigned_to,
-        #     },
-        # )
-        # self.event_bus.publish(
-        #     IncidentCreatedEvent(incident=saved)
-        # )
         self.event_bus.publish(IncidentCreatedEvent(incident=saved))
 
         return IncidentResponseDTO(

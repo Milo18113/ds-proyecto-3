@@ -11,6 +11,7 @@ from backend.api.guards.role_guard import get_current_user_payload
 
 router = APIRouter(tags=["Auth"])
 
+# DTOs
 
 class LoginResponse(BaseModel):
     access_token: str
@@ -23,6 +24,7 @@ class MeResponse(BaseModel):
     role: str
 
 
+# Ruta de LOGIN
 @router.post("/login", response_model=LoginResponse)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -54,7 +56,7 @@ def login(
         role=role.value,
     )
 
-
+# Verificación de usuario actual
 @router.get("/me", response_model=MeResponse)
 def get_me(payload: dict = Depends(get_current_user_payload)):
     return MeResponse(

@@ -5,6 +5,11 @@ API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 
 class ApiClient:
+    """
+    Cliente HTTP para comunicarse con la API REST del backend.
+    Maneja autenticación JWT y proporciona métodos para todos los endpoints.
+    Es NUESTRO API
+    """
     def __init__(self, token=None):
         self.base_url = API_BASE_URL
         self.token = token

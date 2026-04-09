@@ -6,6 +6,11 @@ from backend.application.dtos.incident_dto import ChangeIncidentStatusDTO, Incid
 
 
 class ChangeIncidentStatusUseCase:
+    """
+    Caso de uso: cambio de estado de incidentes.
+    Valida transiciones válidas entre estados según el patrón State,
+    ejecuta la acción correspondiente y dispara evento de notificación.
+    """
     def __init__(self, incident_repo: IncidentRepository, event_bus: EventBus):
         self.incident_repo = incident_repo
         self.event_bus = event_bus

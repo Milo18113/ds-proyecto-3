@@ -11,6 +11,10 @@ from backend.domain.enums.role import Role
 
 
 def seed_users():
+    """
+    Inicializa la base de datos con usuarios de prueba.
+    Crea admin, supervisor y operator con contraseñas hasheadas.
+    """
     init_db()
     db = SessionLocal()
 
