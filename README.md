@@ -1,5 +1,5 @@
 # OpsCenter
-
+JORGE MARCILLO, EMILIO PUGA, PABLO Y EDUARDO CEDEÑO
 Plataforma interna de gestión de incidentes operativos para equipos fintech. Reemplaza el uso de correos, hojas de cálculo y mensajería informal con un sistema trazable, con roles, flujos de estado y notificaciones automáticas. OpsCenter centraliza el registro de incidentes, asignación de responsabilidad, y la gestión de notificaciones en una sola plataforma interna.
 
 ---
